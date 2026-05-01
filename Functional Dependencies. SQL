@@ -1,0 +1,4 @@
+Customer Name -> Customer Status, Total Customer Mileage
+Flight Number -> Aircraft, Flight Mileage
+Aircraft -> Total Aircraft Seats
+Customer Name + Flight Number -> booking / customer-flight relationship
