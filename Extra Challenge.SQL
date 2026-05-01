@@ -1,0 +1,51 @@
+CREATE TABLE aircrafts (
+    aircraft_id INT PRIMARY KEY,
+    aircraft_name VARCHAR(50) NOT NULL UNIQUE,
+    total_aircraft_seats INT NOT NULL,
+
+    CONSTRAINT chk_aircraft_seats_positive
+        CHECK (total_aircraft_seats > 0)
+);
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL UNIQUE,
+    customer_status VARCHAR(20) NOT NULL,
+    total_customer_mileage INT NOT NULL,
+
+    CONSTRAINT chk_customer_status
+        CHECK (customer_status IN ('None', 'Silver', 'Gold')),
+
+    CONSTRAINT chk_customer_mileage_nonnegative
+        CHECK (total_customer_mileage >= 0)
+);
+
+CREATE TABLE flights (
+    flight_number VARCHAR(10) PRIMARY KEY,
+    aircraft_id INT NOT NULL,
+    flight_mileage INT NOT NULL,
+
+    CONSTRAINT fk_flights_aircrafts
+        FOREIGN KEY (aircraft_id)
+        REFERENCES aircrafts(aircraft_id),
+
+    CONSTRAINT chk_flight_mileage_positive
+        CHECK (flight_mileage > 0)
+);
+
+CREATE TABLE bookings (
+    booking_id INT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    flight_number VARCHAR(10) NOT NULL,
+
+    CONSTRAINT fk_bookings_customers
+        FOREIGN KEY (customer_id)
+        REFERENCES customers(customer_id),
+
+    CONSTRAINT fk_bookings_flights
+        FOREIGN KEY (flight_number)
+        REFERENCES flights(flight_number),
+
+    CONSTRAINT uq_customer_flight
+        UNIQUE (customer_id, flight_number)
+);
